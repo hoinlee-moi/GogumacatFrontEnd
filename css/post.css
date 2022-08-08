@@ -1,4 +1,9 @@
-
+.container {
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 156px;
+    background-color: whitesmoke;
+}
 .logo-container {
     position: fixed;
     top: 0;
@@ -34,9 +39,13 @@
     height: 100%;
     width: 100%;
 }
-.main-nav {
-    margin-right: auto;
-    
+.logo-container .logo-list {
+    width: 100%;
+    max-width: 230px;
+    height: 100%;
+    max-height: 45px;
+    display: flex;
+    align-items: center;
 }
 .main-nav-list a {
     font-size: 1.5rem;
@@ -63,9 +72,14 @@
     height: 28px;
     background-color: #c786a4;
 }
+.logo-container .nav-profile-box {
+    display: flex;
+    align-items: center;
+}
 .login-btn {
     cursor: pointer;
-    width: 200px;
+    width: 100%;
+    max-width: 190px;
     height: 30px;
     display: flex;
     align-items: center;
@@ -74,9 +88,7 @@
     font-size: 1.2rem;
     font-weight: bold;
 }
-.container {
-    background-color: whitesmoke;
-}
+
 .post-container {
     width: 100%;
     max-width: 1200px;
@@ -90,17 +102,19 @@
 .post-img {
     width: 100%;
     max-width: 650px;
-    height: 450px;
+    height: auto;
+    max-height: 700px;
     margin: auto;
     border-radius: 10px;
     overflow: hidden;
 }
 .post-img img {
-    object-fit: cover;
+    height: 100%;
+    width: 100%;
 }
 .post-title-container {
     width: 100%;
-    height: 80px;
+    height: auto;
     
 }
 .post-title {
@@ -122,11 +136,16 @@
     font-size: 1.1rem;
     font-size: 600;
 }
+.post-title #postSold{
+    font-size: 1.7rem;
+    font-weight: 600;
+    color : gray;
+}
 .fix-dropdown {
     cursor: pointer;
     position: absolute;
     right: 0;
-    top: 0;
+    top: 45px;
     text-align: center;
     width: 50px;
 }
@@ -142,11 +161,12 @@
 }
 .post-title-container .post-like {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 8px;
+    right: 50px;
     margin-bottom: 5px;
 }
 #heart {
+    cursor: pointer;
     color: #c786a4;
 }
 .profile-container {
@@ -159,6 +179,11 @@
     margin: auto;
     display: flex;
     align-items: center;
+}
+.profile-container .profile_btn {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 .profile #profileImage {
     width: 40px;
@@ -200,23 +225,29 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-
+}
+#mapping .roadview-warning {
+    visibility: hidden;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: red;
+    margin-top: 30px;
 }
 #map {
     border-radius: 10px;
     overflow: hidden;
     width: 400px;
     height: 350px;
-    margin: 40px auto 40px auto;
+    margin: 10px auto 40px auto;
     background-color: #888;
 }
 #roadview {
-    display: none;
     border-radius: 10px;
     overflow: hidden;
     width: 400px;
-    height: 300px;
-    margin : auto;
+    height: 350px;
+    margin : 40px auto 40px auto;
+    position: absolute;
 }
 #map_btn {
     background-color: #c786a4;
@@ -230,15 +261,18 @@
     margin:auto ;
 }
 
+
 .footer {
     background-color: whitesmoke;
+    position: relative;
+    transform: translateY(-100%);
 }
 .footer .footer-container {
     border-top: 3px solid #dcdcdc;
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 2rem 3rem;
 }
 .footer .footer-logo {
@@ -253,6 +287,25 @@
     line-height: 3.5rem;
 }
 .footer p {
+    margin-left: 30px;
     font-size: 1.2rem;
     line-height: 3.5rem;
+}
+
+.chat-btn {
+    width: 180px;
+    font-size: 1.2rem;
+    color: rgb(29 29 31 / 80%);
+    background-color: #c786a4;
+    border-radius: 3px;
+    padding: 3px 5px 3px 5px;
+    display: block;
+    margin: auto;
+}
+
+#chat-box {
+    margin-bottom: 20px;
+}
+.is-hidden {
+    visibility: hidden;
 }

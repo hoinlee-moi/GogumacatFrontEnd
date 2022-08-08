@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+      <title>고구마캣 | 채팅</title>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+      <!-- JS -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+      <!-- 폰트어썸 -->
+      <script src="https://kit.fontawesome.com/ceef4dd32d.js" crossorigin="anonymous"></script>
+      <style>
+            @import url(//fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+            [v-cloak] {
+                  display: none;
+            }
+
+            .close-btn {
+                  float: right;
+                  cursor: pointer;
+            }
+
+            body {
+                  width: 100%;
+                  max-width: 1200px;
+                  padding-top: 10px;
+                  margin: auto;
+            }
+
+            .chat-group {
+                  margin-bottom: 60px;
+            }
+
+            ul{
+                  list-style: none;
+                  padding-left: 0px;
+            }
+
+            .list-group-item{
+                  border-radius: 10px;
+                  padding : 8px;
+                  margin-bottom: 15px;
+            }
+
+            .input-group {
+                  position: fixed; 
+                  width: 100%;
+                  max-width: 1200px;
+                  height: 30px;
+                  bottom: 0;
+                  margin-bottom: 20px;
+            }
+
+            .input-group .content {
+                  width: 94%;
+                  height: 100%;
+                  font-size: 0.9rem;
+                  background-color: white;
+            }
+
+            .input-group button {
+                  height: 100%;
+                  background-color: #c786a4;
+            }
+
+            .time-text {
+                  font-size: 3px;
+                  color: gray;
+                  margin-left: 10px;
+            }
+
+      </style>
+</head>
+<body>
+      <div id="app" v-cloak>
+      <button v-if = "isSeller == true" onclick="order()" style="background-color: #c786a4">이 사람과 거래하기</button>
+      <i onclick="closeChat()" class="fa-solid fa-xmark close-btn"></i>
+      <div class="chat-group">
+            <ul id="msg-box"> 
+            </ul>
+            <ul v-for="message in messages.slice().reverse()">
+                  <li v-if = "message.sender != nickname" class="list-group-item" style="background-color: antiquewhite">
+                  {{message.sender}} : {{message.message}}
+                  <span class="time-text">{{message.sendTime}}</span>
+                  </li>
+                  <li v-else class="list-group-item" style="text-align: right; background-color: #cba5b7">
+                  {{message.sender}} : {{message.message}}
+                  <span class="time-text">{{message.sendTime}}</span>
+                  </li>
+            </ul>
+      </div>
+      <div class="input-group">
+            <input type="text" class="content" v-model="message" v-on:keypress.enter="sendMessage" placeholder="메세지를 입력하세요.">
+            <button class="send-bt" type="button" @click="sendMessage">
+                  보내기
+            </button>
+      </div>
+</div>
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" 
+      integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" 
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+      let domain = "http://www.hongseos.shop"
+      // let domain = "http://localhost:8080"
+
+      let token = $.cookie("mytoken")
+
+      var splitLink = document.location.href.split("?")
+      var idLink = splitLink[1].split("=")
+      var postId = -1
+
+      var sock = new SockJS(domain + "/ws/chat");
+      var ws = Stomp.over(sock);
+      var reconnect = 0;
+
+      var roomId
+      var nickname
+      var isSeller
+
+      var vm
+
+      if(idLink[0] == "id"){
+            postId = idLink[1]
+      } else {
+            roomId = idLink[1]
+      }
+
+      function setting() {
+            if(roomId != undefined) {
+                  $.ajax({
+                        type: "GET",
+                        url: `${domain}/chat/mypostroom/enter/${roomId}`,
+                        data: {},
+                        dataType : "json",
+                        async: false,
+                        beforeSend: function(xhr) {
+                              xhr.setRequestHeader("token", token);
+                        },
+                        success: function (response) {
+                              isSeller = response["isSeller"]
+                              nickname = response["nickname"]
+                              
+                              if(response["messages"]) {
+                                    makeMessage(nickname, response["messages"])
+                              }
+                        }
+                  })
+            }
+
+            if(postId != -1) {
+                  $.ajax({
+                        type: "GET",
+                        url: `${domain}/chat/room/enter/${postId}`,
+                        data: {},
+                        dataType : "json",
+                        async: false,
+                        beforeSend: function(xhr) {
+                              xhr.setRequestHeader("token", token);
+                        },
+                        success: function (response) {
+                              isSeller = response["isSeller"]
+                              nickname = response["nickname"]
+                              roomId = response["roomId"]
+
+                              if(response["messages"]) {
+                                    makeMessage(nickname, response["messages"])
+                              }
+                        }
+                  })
+            }
+
+            connect(roomId)
+
+            createVue(roomId, nickname, isSeller)
+      }
+
+      function createVue(roomId, nickname, isSeller) {
+            vm = new Vue({
+                  el: '#app',
+                  data: {
+                        roomId: roomId,
+                        room: {},
+                        sender: '',
+                        message: '',
+                        messages: [],
+                        nickname: nickname,
+                        isSeller: isSeller
+                  },
+                  created() {
+                        this.roomId = roomId;
+                        this.sender = nickname
+                        this.findRoom();
+                  },
+                  methods: {
+                        findRoom: function() {
+                              axios.get( domain + '/chat/room/'+ this.roomId, 
+                                    {
+                                          headers : {
+                                                token : token
+                                          }
+                                    }
+                              ).then(response => { this.room = response.data;});
+                        },
+                        sendMessage: function() {
+                              if(this.message==''){
+                                    return;
+                              }
+                              ws.send("/app/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message}));
+                              this.message = '';
+                              window.scrollTo(0, document.body.scrollHeight);
+                        },
+                        recvMessage: function(recv) {
+                              this.messages.unshift({"type":recv.type,"sender":recv.type=='ENTER'?'[알림]':recv.sender,"message":recv.message, "sendTime": recv.sendTime})
+                              window.scrollTo(0,document.body.scrollHeight);
+                        }
+                  }
+            });
+      }
+
+      function connect(roomId) {
+            ws.connect({}, function(frame) {
+
+                  ws.subscribe("/topic/chat/room/" + roomId, function(message) {
+                        var recv = JSON.parse(message.body);
+                        vm.recvMessage(recv);
+                  });
+            }, function(error) {
+                  if(reconnect++ <= 5) {
+                  setTimeout(function() {
+                        console.log("connection reconnect");
+                        sock = new SockJS(domain + "/ws/chat");
+                        ws = Stomp.over(sock);
+                        connect(roomId, nickname);
+                  },10*1000);
+                  }
+            });
+      }
+
+      function order() {
+            roomId = String(vm.$data.roomId)
+            axios.post(domain + '/order?roomId='+roomId, {}, 
+                  {
+                        headers : {
+                              token : token
+                        }
+                  }
+            ).then(function(response) {
+                  alert(response.data["msg"]);
+                  window.location.href = '/list.html'
+            })
+      }
+
+      function makeMessage(nickname, messages) {
+            let tempHtml = ""
+            for (let i = 0; i<messages.length; i++) {
+                  if(nickname == messages[i]["sender"]) {
+                        tempHtml += `<li class="list-group-item" style="text-align: right; background-color: #cba5b7">
+                                          ${messages[i]["sender"]} : ${messages[i]["message"]}<span class="time-text">${messages[i]["sendTime"]}</span></li>`
+                  } else {
+                        tempHtml += `<li class="list-group-item" style="background-color: antiquewhite">
+                                          ${messages[i]["sender"]} : ${messages[i]["message"]}<span class="time-text">${messages[i]["sendTime"]}</span></li>`
+                  }
+            }
+            $("#msg-box").append(tempHtml)
+      }
+
+      function closeChat() {
+            sock.close()
+            history.back()            
+      }
+
+      window.addEventListener("load", setting)
+</script>
+</body>
+</html>

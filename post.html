@@ -7,12 +7,9 @@
 
     <title>고구마캣</title>
 
-    <!-- og태그 favicon -->
-    <meta property="og:title" content="고구마캣"/>
-    <meta property="og:description" content="뭐든지 빌려드립니다."/>
-    <meta property="og:image" content="{{ url_for('static', filename='gogumacat.png') }}"/>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <!--favicon-->
+    <link rel="shortcut icon" href="/image/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
 
     <!-- font awesome -->
     <script src="https://kit.fontawesome.com/b8cc3ce1fa.js" crossorigin="anonymous"></script>
@@ -21,6 +18,7 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
@@ -42,46 +40,73 @@
     <!--css연결-->
     <link rel="stylesheet" href="/css/default.css">
     <link rel="stylesheet" href="/css/post.css">
+    <link rel="stylesheet" href="/css/map.css">
+    <link rel="stylesheet" href="/css/order_modal.css">
     
 </head>
 <body>
 <div class="container">
     <div class="logo-container">
         <nav class="logo-nav">
-            <a href="/" id="logo"><img src="./image/logo.png"></a>
-            <div class="search-bar">
-                <input type="text" class="search" placeholder="물품이나 동네를 검색해보세요">
-                <button class="search-bt" type="submit" ><i class="fa fa-duotone fa-magnifying-glass"></i></button>
+            <div class="logo-list">
+                <a href="/index.html" id="logo"><img src="./image/logo.png"></a>
+                <nav class="main-nav">
+                    <!--상단 메뉴바-->
+                    <div class="main-nav-list">
+                        <a href="/list.html" class="nav-tag" style="color: #c786a4;">중고대여</a>
+                        <!-- <a href="#" class="nav-tag">재능기부</a> -->
+                    </div>
+                </nav>
             </div>
-            <div class=" login-btn" onclick="profileinfo()">
-                <i class="fa-solid fa-cat fa-lg"></i>
-                <p id="loginName">다섯글자만님 환영합니다</p>
+            <div class="search-bar">
+                <input type="text" class="search" id="search-text" placeholder="물품이나 동네를 검색해보세요" onkeyup="if(window.event.keyCode == 13){search()}">
+                <button class="search-bt" type="submit" onclick="search()"><i class="fa fa-duotone fa-magnifying-glass"></i></button>
+            </div>
+            <div class="nav-profile-box">
+                <div class="login-btn" onclick="userPage()">
+                    <i class="fa-solid fa-cat fa-lg"></i>
+                    <p id="loginName"><span id="loginName-0"></span></p>
+                </div>
+                <div id="alarm-box" style="margin-left: 10px;cursor: pointer;"></div>
             </div>
         </nav>            
     </div>
+    <!-- Modal start -->
+    <div id="modal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="title">
+                <h2>주문 알림</h2>
+            </div>
+            <div class="close-area" onclick="closeModal()">X</div>
+            <div class="content" id="order-content"></div>
+        </div>
+    </div>
+    <!-- Modal end -->
     <div class="post-container">
         <div class="post-img-container">
-            <div class="post-img">
-                <img id="postImage" src="/image/backgrond.png">
+            <div class="post-img" id="post-img-box">
+                <img id="postImage" src="">
             </div>
+        </div>
+        <div id="chat-box">
         </div>
         <div class="post-title-container">
             <div class="post-title">
-                <p id="postTitle">고구마 고양이 빌려드립니다.</p>
-                <p id="postAddress">서울시 서울구 서울동</p>
-                <p id="postPrice">20000원</p>
-                <div class="fix-dropdown">
-                    <ul class="dropdown">
+                <p id="postTitle"></p>
+                <p id="postAddress"></p>
+                <p id="postPrice"></p>
+                <p id="postSold"></p>
+                <div class="fix-dropdown" id="fix-box">
+                    <!-- <ul class="dropdown">
                         <i class="fa-solid fa-ellipsis-vertical fa-2x dropbtn"></i>
-                        <li class="post-fix"><a href="#">수정하기</a></li>
-                        <li class="post-delete"><a href="#">삭제하기</a></li>
-                    </ul>
+                        <li class="post-fix"><a href="#"></a></li>
+                        <li class="post-delete"><a href="#"></a></li>
+                    </ul> -->
                 </div>
-                <div class="post-like">
-                    <a class="heart-icon" id="heart_a" aria-label="like" th:onclick="|javascript:toggle_like('${post.postId}')|">
+                <div class="post-like" id="post-like-box">
+                    <a class="heart-icon" id="heart_a" aria-label="like" onclick="toggle_like()">
                     <span class="icon is-small">
                         <i id="heart" class="fa-solid fa-heart fa-3x" aria-hidden="true"></i>
-                        <i id="heart" class="fa-regular fa-heart fa-3x" aria-hidden="true"></i>
                     </span>
                     </a>
                 </div>
@@ -89,23 +114,25 @@
         </div>
         <div class="profile-container">
             <div class="profile">
-                <img id="profileImage" src="/image/section3-1.jpg">
-                <p id="profileName">다섯글자만</p>
-                <p id="postDate">작성일자 22.07.13</p>
+                <div class="profile_btn" onclick="wirte_profile()">
+                    <img id="profileImage" src="">
+                    <p id="profileName"></p>
+                </div>
+                <p id="postDate"></p>
             </div>
         </div>
         <div class="post-content-container">
             <div class="post-content">
-                <p id="postContent">고구마인데 고양이이고 고양이인데 고구마레요
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, qui, reiciendis at iusto fuga optio necessitatibus, tenetur ratione voluptatem sed velit aliquid laboriosam. Et nobis culpa illum alias sint. Repellendus molestias, nulla ipsum rem ratione ducimus rerum, accusamus, corrupti accusantium doloribus aliquam eaque pariatur odio repellat numquam incidunt perspiciatis neque voluptatem quidem assumenda. Nulla saepe dolorum tempora illo aperiam qui vel officiis eum expedita? Odio saepe dignissimos sed totam hic sit, numquam repudiandae, velit, ea ipsum sunt aliquid voluptates provident qui! Amet porro unde perspiciatis hic quas in sint tempora fugiat eum doloremque ratione voluptatum reprehenderit eaque cumque, soluta corporis?
+                <p id="postContent">
                 </p>
             </div>
             <div class="map-container">
                 <div class="map" id="mapping">
+                    <p class="roadview-warning">※직거래 장소 반경 100미터 이내 로드뷰가 없습니다.</p>
                     <!-- 지도를 표시할 div 입니다 -->
                     <div id="map" class="local"></div>
                     <!-- 로드뷰를 표시할 div 입니다 -->
-                    <div id="roadview" class="road"></div>
+                    <div id="roadview" class="road is-hidden"></div>
                     <button id="map_btn" class="button is-dark"  onclick="roadview()">
                         로드뷰 보기
                     </button>
@@ -113,28 +140,31 @@
             </div>
         </div>
     </div>
-    <footer class="footer"><!--마지막 바닥글(정적,저작권이나 연락처 등 적게되는 요소) -->
-        <div class="footer-container">
-            <div class="footer-logo">
-             <img src="/image/logo.png" class="end-logo">
-            </div>
-                <ul>
-                 <li><a href="#">신뢰있는 대여 사이트</a></li>
-                 <li><a href="#">신고하기</a></li>
-                </ul>
-                <ul>
-                 <li><a href="#">고객센터</a></li>
-                 <li><a href="#">이용약관</a></li>
-                </ul>
-                
-                 <p>내일배움캠프 A-3팀 MSG<br>
-                 손홍서(팀장),황승호,이호인</p> 
-                
-        </div>
-     </footer>  
 </div>
+<footer class="footer"><!--마지막 바닥글(정적,저작권이나 연락처 등 적게되는 요소) -->
+    <div class="footer-container">
+        <div class="footer-logo">
+         <img src="/image/logo.png" class="end-logo">
+        </div>
+            <!-- <ul>
+             <li><a href="#">신뢰있는 대여 사이트</a></li>
+             <li><a href="#">신고하기</a></li>
+            </ul>
+            <ul>
+             <li><a href="#">고객센터</a></li>
+             <li><a href="#">이용약관</a></li>
+            </ul> -->
+            
+             <p>내일배움캠프 A-3팀 MSG<br>
+             손홍서(팀장),황승호,이호인</p> 
+            
+    </div>
+ </footer>  
 
-<script src=""></script>
+ <script src="/js/userInfo.js"></script>
+ <script src="/js/post.js"></script>
+ <script src="/js/like.js"></script>
+<script src="/js/search.js"></script>
 
 </body>
 </html>

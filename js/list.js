@@ -1,192 +1,190 @@
+const domain = "http://www.hongseos.shop"
+// let domain = "http://localhost:8080"
 
-    $(document).ready(function () {
+const token = $.cookie("mytoken")
+
+$(document).ready(function () {
+    var splitLink = document.location.href.split("?")
+    if(splitLink[1]) { //검색어 있음
+        var queryLink = splitLink[1].split("=")
+        searchListing(queryLink[1], "latest")
+    } else {
         listing("latest");
+    }
+});
+
+function listing(orderType) {
+    $.ajax({
+        type: "GET",
+        url: `${domain}/post/all?orderType=${orderType}`,
+        data: {},
+        dataType : "json",
+        beforeSend: function(xhr) {
+                xhr.setRequestHeader("token", token);
+        },
+        success: function (response) {
+            $("#post-card-box").empty();
+            let posts = response["data"]
+            for (let i = 0; i < response["count"]; i++) {
+                makePost(posts[i]);
+            }
+        }
     });
-    
-    function listing(order_type) {
-        $.ajax({
-            type: "GET",
-            url: "/all",
-            data: {
-                'orderType': order_type
-            },
-            success: function (response) {
-                $("#card-box").empty();
-    
-                for (let i = 0; i < response.length; i++) {
-                    make_post(response[i]);
-                }
+}
+
+function searchListing(query, orderType) {
+    $.ajax({
+        type: "GET",
+        url: `${domain}/post/search?query=${query}&orderType=${orderType}`,
+        data: {},
+        dataType : "json",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("token", token);
+        },
+        success: function (response) {
+            $("#post-card-box").empty();
+            $("#search-query-box").empty();
+            let posts = response["data"]
+            //검색어 보여주는 칸
+            $("#search-query-box").append(
+                `<h3 class="menu-container"><span id="search-result-text" style="color: red;">${decodeURI(query)}</span>의 검색 결과 입니다.</h3>`
+            )
+            for (let i = 0; i < response["count"]; i++) {
+                makePost(posts[i]);
             }
-        });
-    }
-    
-    function make_post(post) {
-        let temp_html = `<div class="col" style="cursor: pointer;">
-                                    <div class="card h-100" id="card-${post['postId']}">
-                                        <!--사진 수정-->
-                                        <img src="${post['postImgs'][0]['imgUrl']}" class="card-img-top image" onclick="location.href='/post/${post["postId"]}'">
-                                        <div class="card-body">
-                                            <h5 class="card-title" onclick="location.href='/post/${post['postId']}'">${post['title']}</h5>
-                                            <p class="card-text" style="font-weight: bold;">${post['price']}원</p>
-                                            <p class="address-text">${post['address']}</p>
-                                            <p class="card-text small-text">관심 ${post['likeCount']}</p>
-                                        </div>
-                                    </div>
-                                </div>`
-        $("#card-box").append(temp_html)
-    }
-    
-    function searching(new_order, new_page) {
-        order = new_order
-        page = new_page
-        let query = $('#search-box').val();
-        if (query == "") {
-            query = $("#query-text-box").val().split[" "][0];
+        },
+        error : function () {
+            alert("로그인을 먼저 해주세요.")
+            window.location.href = "/login.html"
         }
-        if (query == "") {
-            alert("검색어를 입력하세요");
-            return;
-        } else {
-            $.ajax({
-                type: "GET",
-                url: `/search?query=${query}&order=${order}&page=${page}`,
-                data: {},
-                success: function (response) {
-                    $("#card-box").empty();
-                    let posts = response;
-    
-                    for (let i = 0; i < posts.length; i++) {
-                        make_post(posts[i], i);
-                    }
-    
-                    $("#query-text-box").empty()
-                    $("#query-text-box").append(`"${query}" 검색내역 입니다.`)
-                    $("#query-text-box").removeClass("is-hidden")
-                }
-            })
-        }
+    })
+}
+
+function makePost(post) {
+    let sold = post["sold"]
+    if(sold == true) {
+        let tempHtml =  `<article class="card">
+                            <a href="/post.html?id=${post["postId"]}" class="crad-link">
+                                <div class="card-img">
+                                    <img src='${post["postImgs"][0]["imgUrl"]}' alt="title">
+                                </div>
+                                <div class="card-desc">
+                                    <p class="card-title">${post["title"]}</p>
+                                    <p class="card-sold">대여완료</p>
+                                    <p class="card-address">${post["address"]}</p>
+                                    <p class="card-like">관심 ${post["likeCount"]}</p>
+                                </div>
+                            </a>
+                        </article>`
+        $("#post-card-box").append(tempHtml)
+    } else {
+        let tempHtml =  `<article class="card">
+                            <a href="/post.html?id=${post["postId"]}" class="crad-link">
+                                <div class="card-img">
+                                    <img src='${post["postImgs"][0]["imgUrl"]}' alt="title">
+                                </div>
+                                <div class="card-desc">
+                                    <p class="card-title">${post["title"]}</p>
+                                    <p class="card-price">${post["price"]}원</p>
+                                    <p class="card-address">${post["address"]}</p>
+                                    <p class="card-like">관심 ${post["likeCount"]}</p>
+                                </div>
+                            </a>
+                        </article>`
+        $("#post-card-box").append(tempHtml)
     }
-    
-    function pagination(last_page_num, page, type) {
-        $("#pagination-list").empty()
-    
-        if (last_page_num == 1) {
-            $("#page-box").addClass("is-hidden")
-        }
-    
-        let temp_html = ""
-    
-        let start = page - 4
-    
-        if (start <= 0) {
-            start = 1
-        }
-    
-        let cnt = 0
-        for (let i = start; i <= last_page_num; i++) {
-            if (cnt > 9) {
-                temp_html += `<li><span class="pagination-ellipsis">&hellip;</span></li>`
-                break
-            }
-            if (page == i) {
-                temp_html += `<li><a class="pagination-link is-current" area-current="page">${page}</a></li>`
-            } else {
-                if (type == "search") {
-                    temp_html += `<li><a class="pagination-link" onclick="searching(order,${i})">${i}</a></li>`
-                } else if (type == "address") {
-                    temp_html += `<li><a class="pagination-link" onclick="search_by_address(order,${i})">${i}</a></li>`
-                } else if (type == "my_address") {
-                    temp_html += `<li><a class="pagination-link" onclick="find_location(order,${i})">${i}</a></li>`
-                } else {
-                    temp_html += `<li><a class="pagination-link" onclick="listing(order,${i})">${i}</a></li>`
-                }
-            }
-            cnt += 1
-        }
-    
-        $("#pagination-list").append(temp_html)
+}
+
+function click_sort_btn(order_type) {
+    let query = $("#search-result-text").text()
+    if(query) {
+        searchListing(query, order_type)
     }
-    
-    function click_sort_btn(order_type) {
-        if ($("#query-text-box").hasClass("is-hidden") && $("#juso-search-btn").hasClass("is-hidden")) {
-            listing(order_type)
-        } else if ($("#query-text-box").hasClass("is-hidden")) {
-            search_by_address(order_type)
-        } else {
-            searching(order_type)
-         }
-    
-        if (order_type == "latest") {
-            $('#latest-tag').addClass("is-dark")
-            $('#like-tag').removeClass("is-dark")
-            $('#address-tag').removeClass("is-dark")
-        } else {
-            $('#like-tag').addClass("is-dark")
-            $('#latest-tag').removeClass("is-dark")
-            $('#address-tag').removeClass("is-dark")
-        }
+    else {
+        listing(order_type)
     }
-    
-    function get_gu(si) {
-        $("#gu-box").addClass("is-hidden")
-        $("#dong-box").addClass("is-hidden")
-        $("#juso-search-btn").addClass("is-hidden")
-        $.ajax({
-            type: "GET",
-            url: `/get_gu?si=${si}`,
-            data: {},
-            success: function (response) {
-                if (response["gu"] == "세종특별자치시") {
-                    get_dong("세종특별자치시")
-                    return
-                }
-                $("#gu-select").empty();
-                let gu = response["gu"];
-                let temp_html = "<option>동네를 선택하세요</option>"
-                for (let i = 0; i < gu.length; i++) {
-                    temp_html += `<option value="${gu[i]}">${gu[i]}</option>`
-                }
-                $("#gu-select").append(temp_html)
-                $("#gu-box").removeClass("is-hidden")
-            }
-        });
+
+    if (order_type == "latest") {
+        $('#latest-tag').addClass("is-dark")
+        $('#like-tag').removeClass("is-dark")
+        $('#address-tag').removeClass("is-dark")
+    } else {
+        $('#like-tag').addClass("is-dark")
+        $('#latest-tag').removeClass("is-dark")
+        $('#address-tag').removeClass("is-dark")
     }
-    
-    function get_dong(gu) {
-        $.ajax({
-            type: "GET",
-            url: `/get_dong?gu=${gu}`,
-            data: {},
-            success: function (response) {
-                $("#dong-select").empty();
-                let dong = response["dong"];
-                let temp_html = "<option>동을 선택하세요</option>"
-                for (let i = 0; i < dong.length; i++) {
-                    temp_html += `<option value="${dong[i]}">${dong[i]}</option>`
-                }
-                $("#dong-select").append(temp_html)
-                $("#dong-box").removeClass("is-hidden")
-            }
-        });
-    }
-    
-    function search_by_address(new_order, new_page) {
-        order = new_order
-        page = new_page
-        let si = $("#si-select").val()
-        let gu = $("#gu-select").val()
-        let dong = $("#dong-select").val()
-        $.ajax({
-            type: "GET",
-            url: `/search/address?si=${si}&gu=${gu}&dong=${dong}&order=${order}&page=${page}`,
-            data: {},
-            success: function (response) {
-                $("#card-box").empty();
-                let posts = response["posts"];
-                pagination(parseInt(response["last_page_num"]), page, "address")
-                for (let i = 0; i < posts.length; i++) {
-                    make_post(posts[i], i);
-                }
-            }
-        });
-    }
+}
+function posting() {
+    if (!token) {
+        alert("로그인이 필요한 서비스 입니다.")
+        window.location.href ='/login.html'
+  } else {
+  window.location.href = '/posting.html'
+  }
+}
+
+
+
+// function get_gu(si) {
+//     $("#gu-box").addClass("is-hidden")
+//     $("#dong-box").addClass("is-hidden")
+//     $("#juso-search-btn").addClass("is-hidden")
+//     $.ajax({
+//         type: "GET",
+//         url: `/get_gu?si=${si}`,
+//         data: {},
+//         success: function (response) {
+//             if (response["gu"] == "세종특별자치시") {
+//                 get_dong("세종특별자치시")
+//                 return
+//             }
+//             $("#gu-select").empty();
+//             let gu = response["gu"];
+//             let temp_html = "<option>동네를 선택하세요</option>"
+//             for (let i = 0; i < gu.length; i++) {
+//                 temp_html += `<option value="${gu[i]}">${gu[i]}</option>`
+//             }
+//             $("#gu-select").append(temp_html)
+//             $("#gu-box").removeClass("is-hidden")
+//         }
+//     });
+// }
+
+// function get_dong(gu) {
+//     $.ajax({
+//         type: "GET",
+//         url: `/get_dong?gu=${gu}`,
+//         data: {},
+//         success: function (response) {
+//             $("#dong-select").empty();
+//             let dong = response["dong"];
+//             let temp_html = "<option>동을 선택하세요</option>"
+//             for (let i = 0; i < dong.length; i++) {
+//                 temp_html += `<option value="${dong[i]}">${dong[i]}</option>`
+//             }
+//             $("#dong-select").append(temp_html)
+//             $("#dong-box").removeClass("is-hidden")
+//         }
+//     });
+// }
+
+// function search_by_address(new_order, new_page) {
+//     order = new_order
+//     page = new_page
+//     let si = $("#si-select").val()
+//     let gu = $("#gu-select").val()
+//     let dong = $("#dong-select").val()
+//     $.ajax({
+//         type: "GET",
+//         url: `/search/address?si=${si}&gu=${gu}&dong=${dong}&order=${order}&page=${page}`,
+//         data: {},
+//         success: function (response) {
+//             $("#card-box").empty();
+//             let posts = response["posts"];
+//             pagination(parseInt(response["last_page_num"]), page, "address")
+//             for (let i = 0; i < posts.length; i++) {
+//                 makePost(posts[i], i);
+//             }
+//         }
+//     });
+// }

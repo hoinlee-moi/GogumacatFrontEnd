@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+
+    <!-- Webpage Title -->
+    <title>고구마캣</title>
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/b8cc3ce1fa.js" crossorigin="anonymous"></script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <!-- 카카오 맵과 다음 주소검색 -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+    
+    <!-- css 분리-->
+    <link rel="stylesheet" href="/css/default.css"/>
+    <link rel="stylesheet" href="/css/user.css"/>
+    <link rel="stylesheet" href="/css/user_modal.css"/>
+    <link rel="stylesheet" href="/css/order_modal.css">
+</head>
+<body>
+    <div class="container">
+    <!-- 모달 html -->
+    <div id="modal-profile" class="modal-overlay-0">
+        <div class="modal-password">
+            <button class="close-btn" id="profile-off-0" onclick="modal_off(this)">X</button>
+            <label class="label" for="input-check-pw">비밀번호</label>
+                <div class="media-content">
+                        <div class="pw-input">
+                            <input id="input-check-pw" class="input" type="password">
+                            <button class="pw-check" 
+                             onclick="check_pw(document.querySelector('#modal-profile .media-content'))">확인
+                            </button>
+                        </div>
+                        <p id="help-check-password" class="help-pw"></p>
+                        <p onclick="kakao_pw_check()" class="kakao_help">카카오로그인이라면?</p>
+                </div>
+        </div>
+        <div class="modal-window">
+            <button class="close-btn" id="profile-off-1" onclick="modal_off(this)">X</button>
+            <div class="profile-box">
+                <label>닉네임</label>
+                <div class="name">
+                    <input id="input-nickname"class="modal-nickname" onchange="nickname_reset()">
+                    <button class="nickname_dup" onclick="check_dup_nick()">중복확인</button>
+                </div>
+                    <label>주소</label>
+                <div class="address">
+                    <input id="input-address" class="address-name" onclick="juso()" readonly>
+                    <button class="address_button" onclick="juso()">주소검색</button>
+                </div>
+                <label>프로필사진</label>
+                <div class="profile-img">
+                    <div id="img-file-box" class="img-box">
+                        <label class="file-label"  >
+                            <input class="file-input" type="file" id="img" onclick="img_up()"
+                                accept="image/jpeg, image/jpg, image/png"/>
+                            <span class="file-cta">
+                                <span class="file-label-1">프로필 사진</span>
+                            </span>
+                            <span class="file-name">업로드하기</span>
+                        </label>
+                        <div id="image_preview" class="is-hidden">
+                            <img id="img_pre">
+                        </div>
+                    </div>
+                </div>
+                <label>자신을 소개해주세요</label>
+                <textarea type="text" id="profile-introduce" rows="5"  class="introduce"
+                maxlength="100"></textarea>
+                <button id="profile-update"onclick="update_check()">수정하기</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-delete" class="modal-overlay-1">
+        <div class="modal-password">
+            <button class="close-btn" id="del-off-1" onclick="modal_off(this)">X</button>
+            <label class="label" for="input-check-pw">비밀번호</label>
+                <div class="media-content">
+                        <div class="pw-input">
+                            <input id="delete-check-pw" class="input" type="password">
+                            <button class="pw-check"  
+                            onclick="check_pw(document.querySelector('#modal-delete .media-content'))">확인
+                            </button>
+                        </div>
+                        <p id="help-check-password" class="help"></p>
+                        <p onclick="kakao_pw_check()" class="kakao_help">카카오로그인이라면?</p>
+                </div>
+        </div>
+            <div class="modal-delete-check">
+                <button class="close-btn" id="del-off-1" onclick="modal_off(this)">X</button>
+                    <div class="delete-content">
+                            <p class="delete-check">탈퇴하시겠습니까?</p>
+                            <button class="delete-btn" onclick="userdelete()">확인</button>
+                    </div>
+            </div>
+    </div>
+    <div id="modal-updatePw" class="modal-overlay-2">
+        <div class="modal-password">
+            <button class="close-btn" id="updatePw-off-0" onclick="modal_off(this)">X</button>
+            <label class="label" for="input-check-pw">비밀번호</label>
+                <div class="media-content">
+                        <div class="pw-input">
+                            <input id="update-check-pw" class="input" type="password">
+                            <button class="pw-check"  
+                            onclick="check_pw(document.querySelector('#modal-updatePw .media-content'))">확인
+                            </button>
+                        </div>
+                        <p id="help-check-password" class="help"></p>
+                        <p onclick="kakao_pw_check()" class="kakao_help">카카오로그인이라면?</p>
+                </div>
+        </div>
+        <div class="modal-window">
+            <button class="close-btn" id="updatePw-off-1" onclick="modal_off(this)">X</button>
+            <div class="updatePw-box">
+                    <label>비밀번호</label>
+                    <input id="input-password" class="modify-pw" type="password">
+                    <p id="help-password" class="help">
+                        영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용 가능합니다.</p>
+                    <label>비밀번호 확인</label>
+                    <input id="input-password2" class="modify-pw-check" type="password">
+                    <p id="help-password2" class="help">비밀번호를 다시 입력해주세요.</p>
+                <button id="password-update"onclick="password_check()">수정하기</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 페이지 html -->
+    <div class="logo-container">
+        <nav class="logo-nav">
+            <div class="logo-list">
+                <a href="/index.html" id="logo"><img src="./image/logo.png"></a>
+                <nav class="main-nav">
+                    <!--상단 메뉴바-->
+                    <div class="main-nav-list">
+                        <a href="/list.html" class="nav-tag" style="color: #c786a4;">중고대여</a>
+                        <!-- <a href="#" class="nav-tag">재능기부</a> -->
+                    </div>
+                </nav>
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search" id="search-text" placeholder="물품이나 동네를 검색해보세요" onkeyup="if(window.event.keyCode == 13){search()}">
+                <button class="search-bt" type="submit" onclick="search()"><i class="fa fa-duotone fa-magnifying-glass"></i></button>
+            </div>
+            <div class="nav-profile-box">
+                <div class="login-btn" onclick="userPage()">
+                    <i class="fa-solid fa-cat fa-lg"></i>
+                    <p id="loginName"><span id="loginName-0"></span></p>
+                </div>
+                <div id="alarm-box" style="margin-left: 10px;cursor: pointer;"></div>
+            </div>
+        </nav>            
+    </div>
+       <!-- Modal start -->
+       <div id="modal" class="modal-overlay">
+        <div class="modal-window">
+            <div class="title">
+                <h2>주문 알림</h2>
+            </div>
+            <div class="close-area" onclick="closeModal()">X</div>
+            <div class="content" id="order-content"></div>
+        </div>
+    </div>
+    <!-- Modal end -->
+    <div class="profile-container">
+        <div class="profile">
+            <div class="img-container">
+                <img id="profile-image">
+            </div>
+            <div class="nickname">
+                <p id="name"></p>
+            </div>
+            <div class="btn-container">
+                <button id="profile-update" onclick="modal_on(this)">
+                    <span class="icon is-small"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                    프로필 수정</button>
+                <button id="profile-delete" onclick="sign_out()">
+                    <span class="icon is-small"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
+                    로그아웃</button>
+            </div>
+            <div class="introduce-box">
+                <p id="introduce"></p>
+            </div>
+            <div class="delete-box">
+                <button id="update-password" onclick="modal_on(this)">비밀번호 변경</button>
+            </div>
+            <div class="delete-box">
+                <button id="user-delete" onclick="modal_on(this)">회원탈퇴</button>
+            </div>
+        </div>
+    </div>
+    <div class="list-container">
+        <div id="search-query-box">
+        </div>
+        <div class="list">
+            <div class="list-order">
+                <a onclick="click_sort_btn('latest')" id="latest-tag" class="is-dark"><span >내가 작성한 글</span></a>
+                <a onclick="click_sort_btn('like')" id="like-tag"><span>관심상품</span></a>
+                <a onclick="click_sort_btn('order')" id="order-tag"><span>내가 대여한 상품</span></a>
+                <!-- <a onclick="find_location()"><span id="address-tag">현재 위치!</span></a> -->
+            </div>
+            <!-- <h2>내가 작성한 글</h2> -->
+            <button class="posting-btn" onclick="window.location.href ='/posting.html' ">
+                <span class="icon">
+                    <i class="fa-solid fa-pencil fab"></i>
+                </span>
+                <span>상품 등록하러 가기</span>
+            </button>
+            <div id="post-card-box">
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer"><!--마지막 바닥글(정적,저작권이나 연락처 등 적게되는 요소) -->
+    <div class="footer-container">
+        <div class="footer-logo">
+         <img src="/image/logo.png" class="end-logo">
+        </div>
+            <!-- <ul>
+             <li><a href="#">신뢰있는 대여 사이트</a></li>
+             <li><a href="#">신고하기</a></li>
+            </ul>
+            <ul>
+             <li><a href="#">고객센터</a></li>
+             <li><a href="#">이용약관</a></li>
+            </ul> -->
+             <p>내일배움캠프 A-3팀 MSG<br>
+             손홍서(팀장),황승호,이호인</p> 
+    </div>
+ </footer>    
+ <!--javascript 분리-->
+ <script src="/js/user.js"></script>  
+ <script src="/js/userInfo.js"></script>
+ <script src="/js/search.js"></script>
+</body>
+</html>

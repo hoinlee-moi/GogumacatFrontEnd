@@ -8,15 +8,15 @@
     <!-- Webpage Title -->
     <title>작성 | 고구마캣</title>
 
-    <!--favicon-->
-    <link rel="shortcut icon" href="/image/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
-    
     <!-- 구글 폰트-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap" rel="stylesheet">
         
+    <!--favicon-->
+    <link rel="shortcut icon" href="/image/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/image/favicon.ico" type="image/x-icon">
+    
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
@@ -24,17 +24,19 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/b8cc3ce1fa.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/ceef4dd32d.js" crossorigin="anonymous"></script>
+    
+    <!-- Jquery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" 
+    integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- 주소 검색 API-->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!--지도 api-->
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9600c7eddf2d8ec432aa9d8791d1e471&libraries=services,clusterer,drawing"></script>
-    <!-- Jquery-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" 
-    integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" 
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <!--달력-->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -101,8 +103,8 @@
                     <span class="file-name">업로드하기</span>
                 </label>
             </div>
-            <div id="image_preview" class="is-hidden">
-                <img>
+            <div id="image_preview" class="">
+                <img src="#" id="img_pre">
             </div>
             <textarea id="content" class="textarea"  placeholder="상세 내용을 적어주세요" rows="7"></textarea>
             <div class="field">
@@ -113,7 +115,7 @@
             <p id="local_warning" class="is-hidden" style="font-weight: bold; color: red">※주소 창에 주소를 먼저 입력해 주세요.</p>
             <div id="map" class="is-hidden" ></div>
         </div>
-        <button class="button posting-btn" onclick="posting()">등록하기</button>
+        <button class="button posting-btn" onclick="posting_update()">수정하기</button>
     </div>
     <footer class="footer"><!--마지막 바닥글(정적,저작권이나 연락처 등 적게되는 요소) -->
         <div class="footer-container">
@@ -133,10 +135,10 @@
                  손홍서(팀장),황승호,이호인</p> 
                 
         </div>
-     </footer>
+     </footer>  
 </div>
-<script src="/js/overlap-posting.js"></script>
 <script src="/js/userInfo.js"></script>
-<script src="/js/posting.js"></script>
+<script src="/js/overlap-posting.js"></script>
+<script src="/js/posting-update.js"></script>
 </body>
 </html>
