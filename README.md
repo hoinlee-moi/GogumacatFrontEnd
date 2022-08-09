@@ -56,7 +56,7 @@
 
          <br>
     - 스크롤 애니메이션   :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/27260c638c3076fb5ff0af5f559f80de97339af2/js/index.js#L246)<br>
-        addEventListener를 사용하여 사용자가 scroll 할 때마다 값을 갱신하여 특정 세션에 들어올경우<br> element의 class를 변환하여 CSS의 @Keyframes 의 애니메이션이 동작되도록 만들었습니다.<br>
+        addEventListener를 사용하여 사용자가 scroll 할 때마다 값을 갱신하여 특정 세션에 들어올경우<br> element의 class를 변환하여 CSS의 @Keyframes 의 애니메이션이 동작되도록           만들었습니다.<br>
         **TOSS 홈페이지 참고**<br>
         <br>
         ![](./Readme_gif/ezgif-4-9e6ae07206.gif)
@@ -65,8 +65,7 @@
     - 인기 리스트 띄우기   :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/27260c638c3076fb5ff0af5f559f80de97339af2/js/index.js#L342)<br>
     백엔드에서 보내준 API명세서를 확인하여 jQuery의 Ajax를 이용, 좋아요가 가장 많이 된 인기매물 top8개를 골라 리스트에 띄우도록 만들었습니다.<br>
     **당근마켓 홈페이지 참고**<br>
-    <br>
-    <img src="./Readme_gif/main-list.jpg" width="600" height="388">
+    <br><img src="./Readme_gif/main-list.jpg" width="600" height="388">
 
     <br>
 </details>
