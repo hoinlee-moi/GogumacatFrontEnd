@@ -66,7 +66,6 @@
     백엔드에서 보내준 API명세서를 확인하여 jQuery의 Ajax를 이용, 좋아요가 가장 많이 된 인기매물 top8개를 골라 리스트에 띄우도록 만들었습니다.<br>
     **당근마켓 홈페이지 참고**<br>
     <br>
-    
     <img src="./Readme_gif/main-list.jpg" width="600" height="388">
 
     <br>
