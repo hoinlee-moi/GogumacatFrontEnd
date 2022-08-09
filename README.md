@@ -97,22 +97,44 @@
     <br><img src="./Readme_gif/search.jpg" width="600" height="388">
     <br>
     <br>
-* <span style="font-size : 15px; font-weight : bold">글 상세 페이지</span>   
+* <span style="font-size : 15px; font-weight : bold">글 상세 페이지(글삭제)</span>   
 :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/7ac7577ea9cccd3fe6d6b67832bf1209dc270f5f/js/post.js#L14)<br>
     - 도메인에서 id값을 받아 Ajax로 백엔드에 요청, 받은 데이터로 상세페이지를 구성합니다.
     - 접속한 유저가 토큰을 가지고 있는지와 게시글에 등록된 username과 접속한 username이 같은지를 비교하여 삭제 수정등의 기능을 비 활성화 합니다.<br>
+    - 상단의 모든 조건이 통과 될 경우 글 삭제를 누를 시 Ajax로 토큰과 함께 통신을 보내 db상 데이터를 삭제합니다.   
+    :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/424b0ad03085d21146d057612f4545c002182c37/js/post.js#L207)<br>
     <br><img src="./Readme_gif/post(guest).jpg" width="600" height="388"><br>
     <br><img src="./Readme_gif/post(user).jpg" width="600" height="388">
     <br>
     <br>
 * <span style="font-size : 15px; font-weight : bold">글 작성 페이지</span>   
 :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/3601a0b7c990165f863d2582fade1d508690df68/js/posting.js#L9)<br>
-    -글 작성전에 유저가 로그인을 한 상태인지 쿠키에 저장된 토큰을 확인합니다.<br>
-    -각 입력된 값과 이미지 파일을 FormData에 담아 Ajax로 토큰과 함께 백엔드에 전송합니다.<br>
+    - 글 작성전에 유저가 로그인을 한 상태인지 쿠키에 저장된 토큰을 확인합니다.<br>
+    - 날짜 부분에서 jQuery로 이루어진 달력 라이브러리를 사용했습니다   
+    :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/3601a0b7c990165f863d2582fade1d508690df68/js/overlap-posting.js#L107)<br>
+    - 지도와 주소부분에서 kakao API공식 문서를 바탕으로 주소 검색과 지도 확인을 구성하였습니다.<br>
+    - 등록 버튼을 누를 시 입력된 값과 이미지 파일을 FormData에 담아 Ajax로 토큰과 함께 백엔드에 전송합니다.   
+    :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/3601a0b7c990165f863d2582fade1d508690df68/js/overlap-posting.js#L36)
     <br>
-
-
+    <br><img src="./Readme_gif/posting.png" width="600" height="388">
+    <br>
+    <br>
+* <span style="font-size : 15px; font-weight : bold">글 수정 페이지</span>   
+:mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/424b0ad03085d21146d057612f4545c002182c37/js/posting-update.js#L39)<br>
+    - 글 수정 페이지 들어오기 전 url을 통한 우회 접속을 막기 위해 토큰 검사 및 로그인 한 유저와 글 작성 유저가 동일한지 확인합니다.   
+    :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/424b0ad03085d21146d057612f4545c002182c37/js/posting-update.js#L133)<br>
+    - url을 통해 id 값을 뽑아 내어 해당하는 게시글의 데이터를 Ajax로 불러와 각 요소에 삽입합니다.<br>
+    - 수정 완료 버튼을 누를 시 각 요소의 유무를 파악 후 Ajax를 통해 해당 게시글 데이터를 업데이트 합니다<br>
+    <br><img src="./Readme_gif/ezgif-5-a0b3c7fbad.gif" width="600" height="388">
+    <br>
+    <br>
 </details>
+
+### 3-3. **Open API 사용**
+사이트의 기능을 구현하는데 있어 필요한 부분들을 Open API를 이용하여 구현하였습니다.><br>
+
+<details>
+<summary style="cursor : pointer;">기능 설명 펼치기</summary>
 
 * <span style="font-size : 15px; font-weight : bold">상세 페이지 내 카카오 지도API</span>   
 :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/7ac7577ea9cccd3fe6d6b67832bf1209dc270f5f/js/post.js#L133)<br>
@@ -122,4 +144,4 @@
     <br><img src="./Readme_gif/roadview.jpg" width="600" height="388">
     <br>
     <br>
-
+</details>
