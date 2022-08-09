@@ -47,9 +47,17 @@
 <summary style="cursor : pointer;">기능 설명 펼치기</summary>
 
 *  <span style="font-size : 15px; font-weight : bold">메인페이지</span>
-    - 첫 로딩 화면   :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/665dd55d74ce189f0e43866e0f3548755ec43966/js/index.js#L299) <br>
-        Canvas를 이용하여
-
+    - 첫 로딩 화면   :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/27260c638c3076fb5ff0af5f559f80de97339af2/js/index.js#L98) <br>
+         requestAnimationFrame을 이용하여  첫 페이지가 로딩 될 때 애니메이션 효과 적용<br>
+         **LINE 홈페이지 참고** <br>
+         <br>
+         ![](./Readme_gif/ezgif-4-8dc19e4aae.gif)
+         <br>
+    - 스크롤 애니메이션 :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/27260c638c3076fb5ff0af5f559f80de97339af2/js/index.js#L246)<br>
+        addEventListener를 사용하여 사용자가 scroll 할 때마다 값을 갱신하여 특정 세션에 들어올경우<br> element의 class를 변환하여 CSS의 @Keyframes 의 애니메이션이 동작되도록 만듬
+        **TOSS 홈페이지 참고**<br>
+        <br>
+        ![](./Readme_gif/ezgif-4-9e6ae07206.gif)
 
 </details>
 
