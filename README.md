@@ -67,7 +67,7 @@
     **당근마켓 홈페이지 참고**<br>
     <br>
     
-    <img src="./Readme_gif/main-list.jpg" width="600" height="388"
+    <img src="./Readme_gif/main-list.jpg" width="600" height="388">
 
     <br>
 </details>
