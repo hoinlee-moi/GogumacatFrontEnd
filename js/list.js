@@ -4,9 +4,9 @@ const domain = "http://www.hongseos.shop"
 const token = $.cookie("mytoken")
 
 $(document).ready(function () {
-    var splitLink = document.location.href.split("?")
+    let splitLink = document.location.href.split("?")
     if(splitLink[1]) { //검색어 있음
-        var queryLink = splitLink[1].split("=")
+        let queryLink = splitLink[1].split("=")
         searchListing(queryLink[1], "latest")
     } else {
         listing("latest");
@@ -122,69 +122,3 @@ function posting() {
   window.location.href = '/posting.html'
   }
 }
-
-
-
-// function get_gu(si) {
-//     $("#gu-box").addClass("is-hidden")
-//     $("#dong-box").addClass("is-hidden")
-//     $("#juso-search-btn").addClass("is-hidden")
-//     $.ajax({
-//         type: "GET",
-//         url: `/get_gu?si=${si}`,
-//         data: {},
-//         success: function (response) {
-//             if (response["gu"] == "세종특별자치시") {
-//                 get_dong("세종특별자치시")
-//                 return
-//             }
-//             $("#gu-select").empty();
-//             let gu = response["gu"];
-//             let temp_html = "<option>동네를 선택하세요</option>"
-//             for (let i = 0; i < gu.length; i++) {
-//                 temp_html += `<option value="${gu[i]}">${gu[i]}</option>`
-//             }
-//             $("#gu-select").append(temp_html)
-//             $("#gu-box").removeClass("is-hidden")
-//         }
-//     });
-// }
-
-// function get_dong(gu) {
-//     $.ajax({
-//         type: "GET",
-//         url: `/get_dong?gu=${gu}`,
-//         data: {},
-//         success: function (response) {
-//             $("#dong-select").empty();
-//             let dong = response["dong"];
-//             let temp_html = "<option>동을 선택하세요</option>"
-//             for (let i = 0; i < dong.length; i++) {
-//                 temp_html += `<option value="${dong[i]}">${dong[i]}</option>`
-//             }
-//             $("#dong-select").append(temp_html)
-//             $("#dong-box").removeClass("is-hidden")
-//         }
-//     });
-// }
-
-// function search_by_address(new_order, new_page) {
-//     order = new_order
-//     page = new_page
-//     let si = $("#si-select").val()
-//     let gu = $("#gu-select").val()
-//     let dong = $("#dong-select").val()
-//     $.ajax({
-//         type: "GET",
-//         url: `/search/address?si=${si}&gu=${gu}&dong=${dong}&order=${order}&page=${page}`,
-//         data: {},
-//         success: function (response) {
-//             $("#card-box").empty();
-//             let posts = response["posts"];
-//             pagination(parseInt(response["last_page_num"]), page, "address")
-//             for (let i = 0; i < posts.length; i++) {
-//                 makePost(posts[i], i);
-//             }
-//         }
-//     });
-// }

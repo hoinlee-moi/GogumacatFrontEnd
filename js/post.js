@@ -193,6 +193,7 @@ function map(address) {
         }
     )
 }
+//지도와 로드뷰 전환버튼
 function roadview() {
     $('#map').toggleClass('is-hidden')
     $('#roadview').toggleClass('is-hidden')
@@ -203,7 +204,7 @@ function roadview() {
     }
 }
 
-
+//글 삭제하기
 function deletePost(postId) {
     let result = confirm("정말로 삭제하시겠습니까?");
     if (result) {

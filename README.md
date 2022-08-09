@@ -101,20 +101,25 @@
 :mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/7ac7577ea9cccd3fe6d6b67832bf1209dc270f5f/js/post.js#L14)<br>
     - 도메인에서 id값을 받아 Ajax로 백엔드에 요청, 받은 데이터로 상세페이지를 구성합니다.
     - 접속한 유저가 토큰을 가지고 있는지와 게시글에 등록된 username과 접속한 username이 같은지를 비교하여 삭제 수정등의 기능을 비 활성화 합니다.<br>
-    <br><img src="./Readme_gif/post(guest).jpg" width="600" height="388">
+    <br><img src="./Readme_gif/post(guest).jpg" width="600" height="388"><br>
     <br><img src="./Readme_gif/post(user).jpg" width="600" height="388">
     <br>
     <br>
-* <span style="font-size : 15px; font-weight : bold">상세 페이지 내 카카오 지도API</span>   
-:mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/7ac7577ea9cccd3fe6d6b67832bf1209dc270f5f/js/post.js#L133)<br>
-    - 카카오 api 공식문서를 통하여 지도 api를 구현하였으며 커스텀 오버레이를 통해 고구마캣 대표 색감과 캐릭터 이미지로 변경하였습니다.
-    - 버튼을 통하여 지도와 로드뷰를 번갈아 확인할 수 있도록 구현하였습니다.<br>
-    <br><img src="./Readme_gif/map.jpg" width="600" height="388">
-    <br><img src="./Readme_gif/roadview.jpg" width="600" height="388">
-    <br>
+* <span style="font-size : 15px; font-weight : bold">글 작성 페이지</span>   
+:mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/3601a0b7c990165f863d2582fade1d508690df68/js/posting.js#L9)<br>
+    -글 작성전에 유저가 로그인을 한 상태인지 쿠키에 저장된 토큰을 확인합니다.<br>
+    -각 입력된 값과 이미지 파일을 FormData에 담아 Ajax로 토큰과 함께 백엔드에 전송합니다.<br>
     <br>
 
 
 </details>
 
+* <span style="font-size : 15px; font-weight : bold">상세 페이지 내 카카오 지도API</span>   
+:mag: [코드확인](https://github.com/hoinlee-moi/GogumacatFrontEnd/blob/7ac7577ea9cccd3fe6d6b67832bf1209dc270f5f/js/post.js#L133)<br>
+    - 카카오 api 공식문서를 통하여 지도 api를 구현하였으며 커스텀 오버레이를 통해 고구마캣 대표 색감과 캐릭터 이미지로 변경하였습니다.
+    - 버튼을 통하여 지도와 로드뷰를 번갈아 확인할 수 있도록 구현하였습니다.<br>
+    <br><img src="./Readme_gif/map.jpg" width="600" height="388"><br>
+    <br><img src="./Readme_gif/roadview.jpg" width="600" height="388">
+    <br>
+    <br>
 
