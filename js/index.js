@@ -21,7 +21,7 @@
         }
     }
 ]
-
+    //element모음
     const scene_info = [
         {
             //0
@@ -95,6 +95,34 @@
         }
     ];
 
+    // 첫 GOGUMACAT 로딩 함수
+    function loding() {
+        const box = document.querySelector('#box')
+        box.style.width = `${lodingBox}px`
+        lodingBox+=28
+        // boxWidth++
+        let raf = requestAnimationFrame(loding)
+        if(lodingBox>800){
+            cancelAnimationFrame(raf);
+            setTimeout(() => {
+                lodingMove()
+            }, 350 )           
+        }
+    }
+    // 첫 로딩 함수 이후 하얗게 만드는 로딩
+    function lodingMove() {
+        const whiteBox = document.querySelector('#white-box')
+
+        whiteBox.style.width = `${whiteMove}px`
+        
+        whiteMove +=35
+        let whiteBoxMove = requestAnimationFrame(lodingMove)
+        if(whiteMove > 1500) {
+            cancelAnimationFrame(whiteBoxMove)
+            document.querySelector('#loding').remove()
+            canvas()
+        }
+    }   
 
     //canvas 실행이후 메뉴바가 아래로 내려오게 만듬
     function logoY() {
@@ -296,34 +324,7 @@
         }
     }
 
-    // 첫 GOGUMACAT 로딩 함수
-    function loding() {
-        const box = document.querySelector('#box')
-        box.style.width = `${lodingBox}px`
-        lodingBox+=28
-        // boxWidth++
-        let raf = requestAnimationFrame(loding)
-        if(lodingBox>800){
-            cancelAnimationFrame(raf);
-            setTimeout(() => {
-                lodingMove()
-            }, 350 )           
-        }
-    }
-    // 첫 로딩 함수 이후 하얗게 만드는 로딩
-    function lodingMove() {
-        const whiteBox = document.querySelector('#white-box')
-
-        whiteBox.style.width = `${whiteMove}px`
-        
-        whiteMove +=35
-        let whiteBoxMove = requestAnimationFrame(lodingMove)
-        if(whiteMove > 1500) {
-            cancelAnimationFrame(whiteBoxMove)
-            document.querySelector('#loding').remove()
-            canvas()
-        }
-    }   
+    
     // 윈도우 시작 이후 진행 될 함수들
     window.addEventListener('load', () => {      
         loding()
