@@ -1,6 +1,7 @@
 # :sweet_potato: **GogumacatFrontEnd**
 <span style="font-size : 19px">**중고물품 대여 플랫폼 <br>
-(팀프로젝트) - 프론트엔드**</span> 
+(팀프로젝트) - 프론트엔드**</span> <br>
+[팀 github](https://github.com/sparta-cloud-a3)
 
 <br>
 <br>
