@@ -69,6 +69,7 @@
         - 이후 addEventListener를 사용하여 사용자가 scroll 할 때마다 값을 갱신하여 특정 세션에 들어올경우<br> element의 class를 변환하여 CSS의 @Keyframes 의 애니메이션이 동작되도록 만들었습니다.<br>
         **TOSS 홈페이지 참고**<br>
         <br>
+    
         ![](./Readme_gif/ezgif-4-9e6ae07206.gif)
 
         <br>
