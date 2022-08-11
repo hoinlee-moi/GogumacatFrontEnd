@@ -432,8 +432,7 @@ const objs = inputInfo[0].objs
 <br>
 
 * ### **회고**
-    - 작성중
-
+    - [개인블로그](https://velog.io/@lee_moi/1%EB%B2%88%EC%A7%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9A%8C%EA%B3%A0)
 <br>
 
 * ### **느낀점**
