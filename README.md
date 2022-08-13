@@ -57,6 +57,7 @@
          - 적용 시킬 때 default프레임 속도가 너무 빠르다고 판단 사용자가 페이지를 인식 전에 프레임이 종료 된다거나 너무 빠르기 진행되는 것이 있어 구글링을 통해 setTimeout()이라는 지연 함수를 사용하여 사용자가 너무 지루하거나 빠르다고 느끼지 않을 속도를 구현하였습니다.
          **LINE 홈페이지 참고** <br>
          <br>
+         
          ![](./Readme_gif/ezgif-4-8dc19e4aae.gif)
 
          <br>
@@ -68,6 +69,7 @@
         - 이후 addEventListener를 사용하여 사용자가 scroll 할 때마다 값을 갱신하여 특정 세션에 들어올경우<br> element의 class를 변환하여 CSS의 @Keyframes 의 애니메이션이 동작되도록 만들었습니다.<br>
         **TOSS 홈페이지 참고**<br>
         <br>
+    
         ![](./Readme_gif/ezgif-4-9e6ae07206.gif)
 
         <br>
