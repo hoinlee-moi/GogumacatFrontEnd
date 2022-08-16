@@ -24,7 +24,7 @@
 <ul><span style="font-size : 18px; font-weight : bold">Front-end</span>
 <li>Javascript</li>
 <li>jQuery 3.6.0</li>
-<li>vue.js</li>
+<!-- <li>vue.js</li> -->
 <br>
 </ul>
 <ul><span style="font-size : 18px; font-weight : bold">Back-end</span>
